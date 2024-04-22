@@ -7,15 +7,17 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.activit
-import kotlinx.coroutines.launch
+import com.example.processimgcamera.R
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import android.widget.Button
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         startCamera()
 
         // Define o listener para capturar a imagem quando o botão é clicado
+        val camera_capture_button = findViewById<Button>(R.id.camera_capture_button)
         camera_capture_button.setOnClickListener { takePhoto() }
     }
 
@@ -43,8 +46,7 @@ class MainActivity : AppCompatActivity() {
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
+        return mediaDir ?: filesDir
     }
 
     private fun startCamera() {
